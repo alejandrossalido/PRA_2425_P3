@@ -1,43 +1,28 @@
-#ifndef TABLEENTRY_H
-#define TABLEENTRY_H
+#ifndef DICT_H
+#define DICT_H
 
 #include <string>
-#include <ostream>
+#include <stdexcept> // Necesario para std::runtime_error
 
 template <typename V>
-class TableEntry {
+class Dict {
     public:
-        // Atributos
-        std::string key;
-        V value;
+        // Destructor virtual (importante para interfaces)
+        virtual ~Dict() {}
 
-        // Constructores
-        // 1. Con clave y valor
-        TableEntry(std::string key, V value) : key(key), value(value) {}
+        // Métodos virtuales puros (= 0)
         
-        // 2. Solo con clave (valor por defecto)
-        TableEntry(std::string key) : key(key), value() {}
-        
-        // 3. Constructor por defecto
-        TableEntry() : key(""), value() {}
+        // Inserta el par key->value. Lanza error si ya existe.
+        virtual void insert(std::string key, V value) = 0;
 
-        // Sobrecarga de operadores (Friends definidos inline)
-        
-        // Solo compara las claves
-        friend bool operator==(const TableEntry<V> &te1, const TableEntry<V> &te2) {
-            return te1.key == te2.key;
-        }
+        // Busca el valor asociado a key. Lanza error si no lo encuentra.
+        virtual V search(std::string key) = 0;
 
-        // Solo compara las claves
-        friend bool operator!=(const TableEntry<V> &te1, const TableEntry<V> &te2) {
-            return te1.key != te2.key;
-        }
+        // Elimina el par asociado a key. Lanza error si no lo encuentra.
+        virtual V remove(std::string key) = 0;
 
-        // Imprime el contenido
-        friend std::ostream& operator<<(std::ostream &out, const TableEntry<V> &te) {
-            out << "('" << te.key << "' => " << te.value << ")";
-            return out;
-        }
+        // Devuelve el número de elementos
+        virtual int entries() = 0;
 };
 
 #endif
