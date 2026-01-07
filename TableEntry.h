@@ -9,7 +9,6 @@ using namespace std;
 template <typename V>
 class TableEntry {
     public:
-        
         string key;
         V value;
 
@@ -19,20 +18,34 @@ class TableEntry {
         // Constructor solo con clave
         TableEntry(std::string key) : key(key), value() {}
 
-        // Coonstructor clave vacía
+        // Constructor clave vacía
         TableEntry() : key(""), value() {}
 
-        // Comparación de igualdad: Solo mira la clave
+        // --- OPERADORES DE COMPARACIÓN (Necesarios para HashTable y BSTree) ---
+
+        // Igualdad (==)
         friend bool operator==(const TableEntry<V> &te1, const TableEntry<V> &te2) {
             return te1.key == te2.key;
         }
 
-        // Comparación de desigualdad: Solo mira la clave
+        // Desigualdad (!=)
         friend bool operator!=(const TableEntry<V> &te1, const TableEntry<V> &te2) {
             return te1.key != te2.key;
         }
 
-        // Operador de salida: Imprime el par clave->valor
+        // Menor que (<) -> IMPORTANTE PARA EL ÁRBOL
+        friend bool operator<(const TableEntry<V> &te1, const TableEntry<V> &te2) {
+            return te1.key < te2.key;
+        }
+
+        // Mayor que (>) -> IMPORTANTE PARA EL ÁRBOL
+        friend bool operator>(const TableEntry<V> &te1, const TableEntry<V> &te2) {
+            return te1.key > te2.key;
+        }
+
+        // --- OPERADOR DE SALIDA ---
+
+        // Imprime el par clave->valor
         friend std::ostream& operator<<(std::ostream &out, const TableEntry<V> &te) {
             out << "('" << te.key << "' => " << te.value << ")";
             return out;
